@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: ollama-local-log-agent
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/payments}
+    username: ${SPRING_DATASOURCE_USERNAME:}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    hikari:
+      initialization-fail-timeout: 0
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        boot:
+          allow_jdbc_metadata_access: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+agent:
+  workspace-path: ${AGENT_WORKSPACE_PATH:${user.dir}}
+  pipeline-timeout: ${AGENT_PIPELINE_TIMEOUT:PT55S}
+  fallback-fix-target: ${AGENT_FALLBACK_FIX_TARGET:src/main/java/com/example/ollamalogagent/payments/PaymentService.java}
+  ollama:
+    base-url: ${AGENT_OLLAMA_BASE_URL:http://localhost:11434}
+    model: ${AGENT_OLLAMA_MODEL:llama3}
+    request-timeout: ${AGENT_OLLAMA_REQUEST_TIMEOUT:PT25S}
+  git:
+    remote-name: ${AGENT_GIT_REMOTE_NAME:origin}
+    base-branch: ${AGENT_GIT_BASE_BRANCH:main}
+    push-enabled: ${AGENT_GIT_PUSH_ENABLED:false}
+  github:
+    api-base-url: ${AGENT_GITHUB_API_BASE_URL:https://api.github.com}
+    enabled: ${AGENT_GITHUB_ENABLED:false}
+    owner: ${AGENT_GITHUB_OWNER:}
+    repo: ${AGENT_GITHUB_REPO:}
+    token: ${AGENT_GITHUB_TOKEN:${GITHUB_TOKEN:}}
